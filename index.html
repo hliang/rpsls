@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Rock-Paper-Scissors-Lizard-Spock</title>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <p> === DISPUTE TERMINATOR ===</p>
+    <h3>Rules</h3>
+    <p>Scissors cuts paper. Paper covers rock. Rock crushes lizard. Lizard poisons Spock. Spock smashes scissors. Scissors decapitates lizard. Lizard eats paper. Paper disproves Spock. Spock vaporizes rock. Rock crushes scissors.</p>
+    <h3>player-1 picked: <span id="player1Pick"></span></h3>
+    <h3>player-2 picked: <span id="player2Pick"></span></h3>
+
+    <button class="btn-pick" data-pick="rock">ROCK</button>
+    <button class="btn-pick" data-pick="paper">PAPER</button>
+    <button class="btn-pick" data-pick="scissior">SCISSOR</button>
+    <button class="btn-pick" data-pick="lizard">LIZARD</button>
+    <button class="btn-pick" data-pick="spock">SPOCK</button>
+
+    <div id="divChat">
+        <div id="msg-history"></div>
+        <div id="msg-input"></div>
+    </div>
+
+    <script src="assets/javascript/app.js"></script>
+</body>
+
+</html>
