@@ -9,28 +9,36 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js" type="text/javascript"></script>
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
-    <p> === DISPUTE TERMINATOR ===</p>
-    <h3>Rules</h3>
-    <p>Scissors cuts paper. Paper covers rock. Rock crushes lizard. Lizard poisons Spock. Spock smashes scissors. Scissors decapitates lizard. Lizard eats paper. Paper disproves Spock. Spock vaporizes rock. Rock crushes scissors.</p>
-    <button id="btn-start">START</button>
-    <button id="btn-end" disabled>END</button>
-    <div id="playground" style="display:none">
-        <h3>player-1 picked: <span id="player1Pick"></span></h3>
-        <h3>player-2 picked: <span id="player2Pick"></span></h3>
-        <button class="btn-pick" data-pick="rock">ROCK</button>
-        <button class="btn-pick" data-pick="paper">PAPER</button>
-        <button class="btn-pick" data-pick="scissior">SCISSOR</button>
-        <button class="btn-pick" data-pick="lizard">LIZARD</button>
-        <button class="btn-pick" data-pick="spock">SPOCK</button>
-    </div>
+    <div id="main" class="container">
+        <h1> DISPUTE TERMINATOR </h1>
+        <button id="btn-start">START</button>
+        <button id="btn-end" disabled>END</button>
+        <div id="playground" style="display:none">
+            <h3>player-1 picked: <span id="player1Pick"></span></h3>
+            <h3>player-2 picked: <span id="player2Pick"></span></h3>
+            <button class="btn-pick" data-pick="rock">ROCK</button>
+            <button class="btn-pick" data-pick="paper">PAPER</button>
+            <button class="btn-pick" data-pick="scissior">SCISSOR</button>
+            <button class="btn-pick" data-pick="lizard">LIZARD</button>
+            <button class="btn-pick" data-pick="spock">SPOCK</button>
+        </div>
 
-    <div id="divChat">
-        <div id="msg-history"></div>
-        <div id="msg-input"></div>
+        <div id="divChat">
+            <div id="msg-history"></div>
+            <div id="msg-input"></div>
+        </div>
+
+        <div class="rules">
+            <p><strong>Rules</strong>: Scissors cuts paper. Paper covers rock. Rock crushes lizard. Lizard poisons Spock. Spock smashes
+                scissors. Scissors decapitates lizard. Lizard eats paper. Paper disproves Spock. Spock vaporizes rock.
+                Rock crushes scissors.</p>
+            <img src="assets/images/rockpaperscissorslizardspock_newthumb.png" class="rule-img" alt="game rules">
+        </div>
+
     </div>
 
     <script src="assets/javascript/app.js"></script>
