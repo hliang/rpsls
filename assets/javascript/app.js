@@ -50,6 +50,13 @@ var gameInstance = {
                 case "scissiorpaper":
                 case "rockscissior":
                 case "paperrock":
+                case "rocklizard":
+                case "lizardspock":
+                case "spockscissior":
+                case "lizardpaper":
+                case "spockrock":
+                case "scissiorlizard":
+                case "paperspock":
                     this.session["player1Wins"] += 1;
                     winner = 1;
                     console.log(p1 + " vs " + p2 + " -- player1 wins");
@@ -57,6 +64,13 @@ var gameInstance = {
                 case "paperscissior":
                 case "scissiorrock":
                 case "paperrock":
+                case "lizardrock":
+                case "spocklizard":
+                case "scissiorspock":
+                case "paperlizard":
+                case "rockspock":
+                case "lizardscissior":
+                case "spockpaper":
                     this.session["player2Wins"] += 1;
                     winner = 2;
                     console.log(p1 + " vs " + p2 + " -- player2 wins");
@@ -80,6 +94,7 @@ var gameInstance = {
                 database.ref("rps/openSessionID").set(self["session"]["sessionID"]);
                 // create a session
                 database.ref("rps/sessions/" + self["session"]["sessionID"]).update(self["session"]);
+                $("#sessionID").text(self["session"]["sessionID"]);
                 console.log("initialize remote");
                 console.log("ready player 1, with session:");
                 console.log(self["session"]);
@@ -90,11 +105,13 @@ var gameInstance = {
                 // retrieve a session
                 database.ref("rps/sessions/" + openSessionID).once('value', function (snap2) {
                     self["session"] = snap2.val();
+                    $("#sessionID").text(self["session"]["sessionID"]);
                     console.log("retrieve game session from remote");
+                    database.ref("rps/openSessionID").set("");
+                    console.log("ready player 2, with session:");
+                    console.log(self["session"])
                 });
-                database.ref("rps/openSessionID").set("");
-                console.log("ready player 2, with session:");
-                console.log(self["session"])
+                
                 return self["session"]["sessionID"];
             }
         });
@@ -116,38 +133,32 @@ var gameInstance = {
 console.log("sessionID=" + gameInstance["session"]["sessionID"]);
 
 
-// // check if there is any player waiting
-// // if none, create new session and be the first player
-// // else, retrieve session id and be the second player
-// database.ref("rps/openSessionID").once('value', function (snapshot) {
-//     var openSessionID = snapshot.val();
-//     console.log("opensession=" + openSessionID);
-//     if (openSessionID == null || openSessionID === "") {
-//         database.ref("rps/openSessionID").set(gameInstance["session"]["sessionID"]);
-//         gameInstance["session"]["currRound"] = 1;
-//         // create a session
-//         database.ref("rps/sessions/" + gameInstance["session"]["sessionID"]).update(gameInstance["session"]);
-//         console.log("initialize remote");
-//         console.log("ready player 1");
-//     } else {
-//         // gameInstance["session"]["sessionID"] = openSessionID;
-//         gameInstance["userid"] = 2;
-//         // retrieve a session
-//         database.ref("rps/sessions/" + gameInstance["session"]["sessionID"]).once('value', function (snap2) {
-//             gameInstance["session"] = snap2.val();
-//             console.log("retrieve game session from remote");
-//         });
-//         database.ref("rps/openSessionID").set("");
-//         console.log("ready player 2");
-//     }
-// });
-
 $("#btn-start").on("click", function(){
     var sid = gameInstance.startGame();
     console.log("game started with sid=" + sid);
     $(this).prop("disabled", true);
     $("#btn-end").prop("disabled", false);
     $("#playground").show();
+
+    // real time update // not working FIXME
+    console.log(gameInstance["session"]["sessionID"] + "xxxxxxxxx");
+    database.ref("rps/sessions" + gameInstance["session"]["sessionID"]).on("value",
+        function (snapshot) {
+            console.log("value changed 222222222 snapshot child currRound=" + snapshot.child("currRound/player1Pick").val());
+            $("#player1Pick").text(snapshot.child("currRound/player1Pick").val());
+            $("#player2Pick").text(snapshot.child("currRound/player2Pick").val());
+            if (snapshot.child("currRound/player1Pick").val() != "" || snapshot.child("currRound/player2Pick").val() !="") {
+                $("#player1Pick").text(snapshot.child("currRound/player1Pick").val());
+                $("#player2Pick").text(snapshot.child("currRound/player2Pick").val());
+            } else {
+                console.log("no player picked. snapshot=" + snapshot.val());
+            }
+        }, function (errorObject) {
+            console.log("The read failed: " + errorObject)
+    });
+
+    console.log("instance=");
+    console.log(gameInstance);
 });
 
 $("#btn-end").on("click", function(){
@@ -158,36 +169,8 @@ $("#btn-end").on("click", function(){
     $("#playground").hide();
 });
 
-// // first retrieval of data
-// database.ref("rps/sessions/" + gameInstance["session"]["sessionID"]).once('value', function (snapshot) {
-//     if (snapshot.child("currRound").val() >= 1) {
-//         gameInstance["session"] = snapshot.val();
-//         console.log("retrieve game instance from remote");
-//     } else {
-//         gameInstance["session"]["currRound"] = 1;
-//         database.ref("rps/sessions/" + gameInstance["session"]["sessionID"]).update(gameInstance["session"]);
-//         console.log("initialize remote");
-//     }
-// });
 
 
-// real time update // TODO: how to get the sessionID?
-console.log(gameInstance["session"]["sessionID"] + "xxxxxxxxx");
-database.ref("rps/sessions" + gameInstance["session"]["sessionID"]).on("value",
-    function (snapshot) {
-        console.log("snapshot child currRound=" + snapshot.child("currRound").val());
-        if (snapshot.child("currRound").val() >= 1) {
-            $("#player1Pick").text(snapshot.child("round1/player1Pick").val());
-            $("#player2Pick").text(snapshot.child("round1/player2Pick").val());
-        } else {
-            console.log("no player picked. snapshot=" + snapshot.val());
-        }
-    }, function (errorObject) {
-        console.log("The read failed: " + errorObject)
-});
-
-console.log("instance=");
-console.log(gameInstance);
 
 // button cliced
 $(".btn-pick").on("click", function () {
@@ -201,6 +184,8 @@ $(".btn-pick").on("click", function () {
         var updates = {};
         updates["currRound/" + playerpick] = gameInstance["session"]["currRound"][playerpick];
         database.ref("rps/sessions/" + gameInstance["session"]["sessionID"]).update(updates);
+        console.log("clicked and updated 1111111111 local game instance/session/currRound:");
+        console.log(gameInstance["session"]["currRound"]);
     } else {
         console.log("you already picked " + gameInstance["session"]["currRound"][playerpick]);
     }
