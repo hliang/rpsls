@@ -1,48 +1,236 @@
 <!DOCTYPE html>
+
 <html lang="en-us">
 
 <head>
+
     <meta charset="UTF-8">
-    <title>Rock-Paper-Scissors-Lizard-Spock</title>
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js" type="text/javascript"></script>
+    <title>Train Scheduler</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- Moment JS -->
+    <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
+    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
-    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
+    <!-- Font Awesome CSS Icons (For cool glyphicons) -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            background: #dae2e7;
+             /* ##f1f3f5; */
+        }
+        .jumbotron {
+            text-align: center;
+            padding: 10px 20px;
+            color: yellow;
+            background-color: #005696;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/c/ce/AT300_HULL_TRAINS_with_logo.jpg') no-repeat center center;
+            background-size: cover;
+            margin-bottom: 1em;
+        }
+        .container .card {
+            margin-bottom: 1em;
+        }
+        .card-header {
+            color: white;
+            background-color: #2471ac;
+            background-image: linear-gradient(to right, #2471ac , yellow);
+        }
+        .btn-outline-primary {
+            color: #2471ac;
+            border-color: #2471ac;
+        }
+        .btn-outline-primary:hover {
+            color: #fff;
+            background-color: #2471ac;
+            border-color: #2471ac;
+        }
+        .fa-minus-circle:hover{
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="main" class="container">
-        <h2> DISPUTE TERMINATOR </h2>
-        <button id="btn-start">START</button>
-        <button id="btn-end" disabled>END</button>
-        <div id="playground" style="display:none">
-            <h3>player-1 picked: <span id="player1Pick"></span></h3>
-            <h3>player-2 picked: <span id="player2Pick"></span></h3>
-            <button class="btn-pick" data-pick="rock">ROCK</button>
-            <button class="btn-pick" data-pick="paper">PAPER</button>
-            <button class="btn-pick" data-pick="scissior">SCISSOR</button>
-            <button class="btn-pick" data-pick="lizard">LIZARD</button>
-            <button class="btn-pick" data-pick="spock">SPOCK</button>
-            <p>session id = <span id="sessionID">#</span></p>
+    <div class="container">
+        <div class="jumbotron jumbotron-fluid">
+            <h1>Chu Chu Chu</h1>
+            <p> every time is train time</p>
         </div>
-
-        <div id="divChat">
-            <div id="msg-history"></div>
-            <div id="msg-input"></div>
-        </div>
-
-        <div class="rules">
-            <p><strong>Rules</strong>: Scissors cuts paper. Paper covers rock. Rock crushes lizard. Lizard poisons Spock. Spock smashes
-                scissors. Scissors decapitates lizard. Lizard eats paper. Paper disproves Spock. Spock vaporizes rock.
-                Rock crushes scissors.</p>
-            <img src="assets/images/rockpaperscissorslizardspock_newthumb.png" class="rule-img" alt="game rules">
-        </div>
-
     </div>
 
-    <script src="assets/javascript/app.js"></script>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <strong>
+                    <i class="fa fa-calendar-plus-o"></i> Add a Train</strong>
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="form-group form-row">
+                        <div class="col-sm-6">
+                            <label for="trainName">Train Name: </label>
+                            <input type="text" class="form-control" id="trainName" placeholder="train name">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="trainDest">Destination: </label>
+                            <input type="text" class="form-control" id="trainDest" placeholder="heading to">
+                        </div>
+                    </div>
+                    <div class="form-group form-row">
+                        <div class="col-sm-6">
+                            <label for="firstTrainTime">First Train Time: </label>
+                            <input type="time" class="form-control" id="firstTrainTime">
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="trainInterval">Interval (min): </label>
+                            <select class="form-control" id="trainInterval">
+                                <option>2</option>
+                                <option>5</option>
+                                <option>10</option>
+                                <option>20</option>
+                                <option>30</option>
+                                <option>60</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Here we have our final submit button -->
+                    <div class="form-group form-row">
+                        <div class="col-sm-6">
+                            <button type="submit" class="btn btn-outline-primary" id="btn-submit">
+                                <i class="fa fa-map-signs"></i> Submit </button>
+                            <button type="submit" class="btn btn-outline-secondary" id="btn-clear">
+                                <i class="fa fa-trash"></i> Clear</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header grad-blue-gray">
+                <strong>
+                    <i class="fa fa-subway"></i> Current Train Schedule</strong>
+            </div>
+            <div class="card-body">
+                <table class="table" id="trainTable">
+                    <thead>
+                        <tr>
+                            <!-- Train Name Destination Frequency (min) NextArrival Minutes Away -->
+                            <th scope="col">Train Name</th>
+                            <th scope="col">Destination</th>
+                            <th scope="col">Frequency (min)</th>
+                            <th scope="col">Next Arrival</th>
+                            <th scope="col">Minutes Away</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Script -->
+    <script>
+        $(document).ready(function () {
+            var config = {
+                apiKey: "AIzaSyC5C0SfrL_4xvBtgveKhsVkC-Ed9iPSBTg",
+                authDomain: "testprj-75652.firebaseapp.com",
+                databaseURL: "https://testprj-75652.firebaseio.com",
+                projectId: "testprj-75652",
+                storageBucket: "testprj-75652.appspot.com",
+                messagingSenderId: "10060697007"
+            };
+            firebase.initializeApp(config);
+            // Get a reference to the database service
+            var database = firebase.database();
+
+            // object to push 
+            var dataToPush = {
+                trainName: "",
+                trainDest: "",
+                firstTrainTime: "",
+                trainInterval: ""
+            };
+
+            // add train
+            database.ref("train").on("child_added", function (snapshot) {
+                var newTrain = snapshot.val();
+                var trainKey = snapshot.key;
+                var nextArrival;
+                var minutesAway;
+                var firstTrainTimeConverted = moment(newTrain.firstTrainTime, "HH:mm");
+                console.log("firstTrainTimeConverted=" + firstTrainTimeConverted.format("HH:mm"));
+                // Difference between the times
+                var currTime = moment();
+                var diffTime = currTime.diff(moment(firstTrainTimeConverted), "minutes");
+                console.log("DIFFERENCE IN TIME: " + diffTime);
+                if (diffTime >= 0) {
+                    minutesAway = newTrain.trainInterval - (diffTime % newTrain.trainInterval);
+                    console.log("minutesAway=" + minutesAway);
+                    nextArrival = currTime.add(minutesAway, "minutes").format("HH:mm");
+                } else {
+                    minutesAway = -diffTime;
+                    nextArrival = firstTrainTimeConverted.format("HH:mm");
+                }
+
+                var tagTr = $("<tr>");
+                var tagDel = $("<i>").addClass("fa fa-minus-circle");
+                tagTr.attr('id', trainKey);
+                tagDel.attr('data-trainKey', trainKey);
+                tagTr.append($("<td>").text(" " + newTrain.trainName).prepend(tagDel));
+                tagTr.append($("<td>").text(newTrain.trainDest));
+                tagTr.append($("<td>").text(newTrain.trainInterval));
+                tagTr.append($("<td>").text(nextArrival));
+                tagTr.append($("<td>").text(minutesAway));
+                $("#trainTable").append(tagTr);
+            });
+            // remove train
+            database.ref("train").on("child_removed", function (snapshot) {
+                var deletedTrain = snapshot.val();
+                var trainKey = snapshot.key;
+                console.log("deleted train:" + trainKey);
+                $("#" + trainKey).remove();
+            });
+
+            // button cliced
+            $("#btn-submit").on("click", function (event) {
+                event.preventDefault();
+                console.log("clicked submit");
+                dataToPush["trainName"] = $("#trainName").val().trim();
+                dataToPush["trainDest"] = $("#trainDest").val().trim();
+                dataToPush["firstTrainTime"] = $("#firstTrainTime").val().trim();
+                dataToPush["trainInterval"] = $("#trainInterval").val().trim();
+                if (dataToPush["trainName"] === "" || dataToPush["trainDest"] === "" || dataToPush["firstTrainTime"] === "" || dataToPush["trainInterval"] === "") {
+                    alert("ERROR: one of the field is incomplete");
+                } else {
+                    database.ref("train").push(dataToPush);
+                }
+                // clear up input form
+                $("#trainName").val("");
+                $("#trainDest").val("");
+                $("#firstTrainTime").val("");
+                $("#trainInterval").val("");
+            });
+
+            $(document).on("click", ".fa-minus-circle", function () {
+                var trainKey = this.getAttribute("data-trainKey");
+                console.log("trainKey=" + trainKey);
+                database.ref("train/" + trainKey).remove();
+            });
+        });
+    </script>
+
 </body>
 
 </html>
